@@ -1,0 +1,7 @@
+:root { color: #172033; background: #f7f8fa; font-family: Arial, Helvetica, sans-serif; }
+* { box-sizing: border-box; }
+body { margin: 0; }
+main { max-width: 720px; margin: 0 auto; padding: 8rem 2rem; }
+h1 { max-width: 12ch; font-size: clamp(2.5rem, 7vw, 4.5rem); letter-spacing: -0.05em; }
+.eyebrow { color: #315a95; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+.notice { color: #526076; }
