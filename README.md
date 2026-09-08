@@ -4,9 +4,11 @@ Cloud security evidence and remediation assurance for small SaaS teams using AWS
 
 ## Current phase
 
-**PHASE 1 — Repository Foundation**
+**PHASE 2 — Domain Foundation**
 
-This repository contains only the web, quality, and test foundation. It does not access AWS, use credentials, contain customer data, or implement domain rules.
+The repository contains a deterministic, synthetic domain foundation for evidence, evaluations, findings, remediation actions, rechecks, and prioritization. All current data is **DEMO DATA**, a **SYNTHETIC ENVIRONMENT**, and **NOT CUSTOMER DATA**.
+
+Real AWS access, AI, database, authentication, billing, automatic remediation, and continuous monitoring are not implemented.
 
 ## Tooling
 
