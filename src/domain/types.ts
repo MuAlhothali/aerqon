@@ -58,18 +58,28 @@ export interface EvidenceObject {
 }
 
 export interface RuleDefinition {
+  applicableResourceType: "AWS::EC2::SecurityGroup" | "AWS::S3::Bucket" | "AWS::RDS::DBInstance";
   ruleId: string; version: string; title: string; service: string; category: string; description: string;
   requiredEvidence: readonly string[]; evaluationContract: string; defaultSeverity: Severity; severityRationale: string;
   confidencePolicy: string; remediationGuidance: string; verificationCondition: string; references: readonly string[]; knownLimitations: readonly string[];
 }
 
+export interface ResourceIdentity {
+  readonly service: string; readonly resourceType: string; readonly resourceId: string;
+  readonly accountPlaceholder: string; readonly region: string;
+}
+
 export interface RuleEvaluation {
+  evidenceBindings: readonly Readonly<{ evidenceId: string; sourceId: string }>[];
+  sourceIds: readonly string[];
   evaluationId: string; assessmentId: string; ruleId: string; ruleVersion: string; evidenceIds: readonly string[]; evaluatedAt: string;
   evaluationState: EvaluationState; rationale: string; severity: Severity; severityRationale: string; confidence: Confidence;
-  confidenceRationale: string; evidenceCompleteness: EvidenceCompleteness; diagnosticCode: string; findingCreated: boolean;
+  confidenceRationale: string; evidenceCompleteness: EvidenceCompleteness; diagnosticCode: string; findingEligible: boolean;
+  resource?: ResourceIdentity;
 }
 
 export interface Finding {
+  assessmentId: string; accountPlaceholder: string;
   findingId: string; evaluationId: string; ruleId: string; ruleVersion: string; service: string; resourceType: string; resourceId: string; resourceName: string; region: string;
   severity: Severity; confidence: Confidence; evaluationState: EvaluationState; remediationState: RemediationState; priorityBand: PriorityBand; priorityRationale: string;
   title: string; summary: string; whyItMatters: string; potentialBusinessImpact: string; recommendation: string; recommendedOwner: string;

@@ -1,10 +1,11 @@
+import { ruleEvidence } from "../../test/evidence-fixtures";
 import { describe, expect, it } from "vitest";
 import { syntheticEvidence } from "../demo/northstar";
 import { evaluateRule } from "./evaluate";
 import { validateEvidenceObject } from "../schemas/evidence-schema";
 
 const context = { assessmentId: "assessment-northstar-baseline", evaluatedAt: "2026-09-09T01:00:00.000Z", inScope: true };
-const run = (ruleId: Parameters<typeof evaluateRule>[0], overrides = {}) => evaluateRule(ruleId, [syntheticEvidence(overrides)], context);
+const run = (ruleId: Parameters<typeof evaluateRule>[0], overrides = {}) => evaluateRule(ruleId, [ruleEvidence(ruleId, overrides)], context);
 
 describe("deterministic rule evaluation", () => {
   it("evaluates SG-001 FAIL and PASS without inferring reachability", () => {
@@ -19,13 +20,15 @@ describe("deterministic rule evaluation", () => {
     expect(run("S3-001", { sourceApi: "GetBucketPolicyStatus", retrievalState: "ACCESS_DENIED" }).evaluationState).toBe("ACCESS_DENIED");
   });
   it("evaluates complete S3 policy status only", () => {
-    expect(run("S3-001", { sourceApi: "GetBucketPolicyStatus", observedFields: { isPublic: true } }).evaluationState).toBe("FAIL");
-    expect(run("S3-001", { sourceApi: "GetBucketPolicyStatus", observedFields: { isPublic: false } }).evaluationState).toBe("PASS");
+    const pab = ruleEvidence("S3-001", { evidenceId: "pab", sourceApi: "GetPublicAccessBlock", observedFields: { publicAccessBlockEnabled: false } });
+    const policy = (isPublic: boolean) => ruleEvidence("S3-001", { evidenceId: "policy", sourceApi: "GetBucketPolicyStatus", observedFields: { isPublic } });
+    expect(evaluateRule("S3-001", [pab, policy(true)], context).evaluationState).toBe("FAIL");
+    expect(evaluateRule("S3-001", [pab, policy(false)], context).evaluationState).toBe("PASS");
   });
   it("evaluates RDS configuration without claiming reachability", () => {
     const result = run("RDS-001", { service: "RDS", sourceApi: "DescribeDBInstances", observedFields: { publiclyAccessible: true } });
     expect(result.evaluationState).toBe("FAIL");
-    expect(result.rationale).toMatch(/does not establish end-to-end network reachability/i);
+    expect(result.rationale).toBe("Configured as publicly accessible; end-to-end network reachability was not established.");
     expect(run("RDS-002", { service: "RDS", sourceApi: "DescribeDBInstances", observedFields: { storageEncrypted: false } }).evaluationState).toBe("FAIL");
   });
   it("implements every uncertainty and applicability state deterministically", () => {
