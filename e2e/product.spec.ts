@@ -67,9 +67,11 @@ test("narrow English and Arabic layouts contain overflow within tables/navigatio
   for (const language of ["en", "ar"]) {
     await page.getByLabel("Language").selectOption(language);
     for (const index of [0, 1, 2, 3, 4, 5, 6, 7]) {
+      await page.locator(".mobile-menu-toggle").click();
       await page.locator("nav button").nth(index).click();
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     }
+    await page.locator(".mobile-menu-toggle").click();
     await page.locator("nav button").nth(2).click();
     await expect(page.locator(".action-row").first().locator(".meta").first()).toBeVisible();
     await page.locator(".action-row .table-link").first().click();
@@ -103,4 +105,46 @@ test("keyboard navigation, finding filters and explicit coverage", async ({ page
   await page.locator("nav").getByRole("button", { name: "Coverage", exact: true }).click();
   await expect(page.locator('tbody [data-status="NOT_EVALUATED"]')).toHaveCount(1);
   await expect(page.locator('tbody [data-status="ACCESS_DENIED"]')).toHaveCount(1);
+});
+
+test("evidence lineage opens only the finding bound to the selected evaluation", async ({ page }) => {
+  await page.locator("nav").getByRole("button", { name: "Evidence", exact: true }).click();
+  await page.getByRole("searchbox").fill("sg-demo-admin");
+  await page.getByLabel("Source", { exact: true }).selectOption("northstar-security-hub");
+  await page.getByRole("button", { name: "Open linked finding" }).click();
+  await expect(page.getByRole("heading", { level: 1, name: "Unrestricted SSH ingress" })).toBeFocused();
+  await expect(page.locator(".detail-context")).toContainText("sg-demo-admin");
+  await expect(page.locator('.decision-panel [data-status="RESOLVED"]')).toBeVisible();
+});
+
+test("premium review surfaces retain layout across language, theme and viewport", async ({ page }) => {
+  test.setTimeout(120000);
+  for (const width of [390, 768, 1440]) {
+    await page.setViewportSize({ width, height: 1000 });
+    for (const language of ["en", "ar"]) {
+      await page.getByLabel("Language", { exact: true }).selectOption(language);
+      for (const theme of ["light", "dark"]) {
+        await page.getByLabel(language === "ar" ? "المظهر" : "Theme", { exact: true }).selectOption(theme);
+        for (let index = 0; index < 8; index++) {
+          if (width <= 800) await page.locator(".mobile-menu-toggle").click();
+          await page.locator("nav button").nth(index).click();
+          await expect(page.locator("main h1")).toBeFocused();
+          expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${width}/${language}/${theme}/${index}`).toBe(true);
+          if (width <= 800) await expect(page.locator("nav")).toBeHidden();
+        }
+      }
+    }
+  }
+});
+
+test("200 percent text sizing keeps core controls and evidence usable", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 1000 });
+  await page.addStyleTag({ content: ":root { font-size:32px!important; }" });
+  for (const language of ["en", "ar"]) {
+    await page.getByLabel("Language", { exact: true }).selectOption(language);
+    for (const index of [0, 1, 2, 3, 4, 5, 6]) {
+      await page.locator("nav button").nth(index).click();
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${language}/${index}`).toBe(true);
+    }
+  }
 });

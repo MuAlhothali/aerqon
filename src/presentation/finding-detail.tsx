@@ -15,6 +15,7 @@ export function FindingDetail({ detail: d, model, language, onRecheck }: { detai
   const imported = detectionSources.filter((source) => detectionEvidence.some((evidence) => evidence.sourceId === source.sourceId) && source.sourceType !== "SYNTHETIC_AWS_OBSERVATION");
   return <>
     <div className="detail-context"><Technical>{d.finding.ruleId} / v{d.finding.ruleVersion}</Technical><Technical>{d.finding.resourceId}</Technical><span>{d.finding.service}</span><Technical>{d.finding.region}</Technical></div>
+    <div className="identity-signals"><div><span>{t("severity")}</span><Status value={d.finding.severity} language={language} kind="severity" /></div><div><span>{t("confidence")}</span><Status value={d.finding.confidence} language={language} kind="confidence" /></div><div><span>{t("owner")}</span><strong>{d.action.owner}</strong></div></div>
     <section className="decision-panel" aria-label={t("decisionRecord")}>
       <div className="decision-intro"><p className="eyebrow">{t("decisionRecord")}</p><p>{t("baselineNote")}</p></div>
       <div className="decision-cell"><span>{t("baseline")}</span><Status value={d.baselineEvaluation?.evaluationState ?? "NO_BASELINE"} language={language} /><small><Technical>{model.baseline.generatedAt.slice(0, 10)}</Technical></small></div>
@@ -22,6 +23,7 @@ export function FindingDetail({ detail: d, model, language, onRecheck }: { detai
       <div className="decision-cell"><span>{t("remediation")}</span><Status value={d.finding.remediationState} language={language} kind="remediation" /><small>{t(d.verification)}</small></div>
     </section>
     <div className="detail-layout"><div className="detail-main">
+      <section className="proof-boundary"><div><p className="eyebrow">{arabic ? "حدود الاستنتاج" : "CONCLUSION BOUNDARY"}</p><h2>{arabic ? "ما الذي يثبته الدليل؟" : "What the evidence establishes"}</h2><p>{arabic ? "السجل التقني الأصلي للاستنتاج المؤكد، محفوظ دون تغيير:" : "The confirmed detection record, preserved verbatim:"}</p><p className="confirmed-rationale" dir="ltr">{confirmedEvaluation?.rationale ?? d.finding.summary}</p></div><div><h2>{arabic ? "ما الذي لا يثبته؟" : "What it does not establish"}</h2><p>{arabic ? ar?.limitation : d.finding.limitations.join(" ")}</p></div></section>
       <div className="interpretation-grid">
         <Section title={t("why")}><p>{arabic ? ar?.why : d.finding.whyItMatters}</p><h3>{t("impact")}</h3><p>{t("impactText")}</p></Section>
         <Section title={t("interpretation")}><div className="rationale-heading"><h3>{t("severityWhy")}</h3><Status value={d.finding.severity} language={language} kind="severity" /></div><p>{arabic ? ar?.why : confirmedEvaluation?.severityRationale}</p><div className="rationale-heading"><h3>{t("confidenceWhy")}</h3><Status value={d.finding.confidence} language={language} kind="confidence" /></div><p>{t("confidenceText")}</p></Section>
