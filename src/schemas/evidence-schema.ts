@@ -18,7 +18,7 @@ export function isTimestamp(value: unknown): value is string {
 
 // Depth is checked before recursion. Copy only JSON data descriptors.
 // Reject getters, exotic objects, cycles, sparse arrays and excessive data.
-function copyJson(input: unknown): Json {
+export function copyBoundedJson(input: unknown): Json {
   let nodes = 0;
   let text = 0;
   const ancestors = new WeakSet<object>();
@@ -63,7 +63,7 @@ export type EvidenceValidationResult = { success: true; data: Readonly<EvidenceO
 
 export function validateEvidenceObject(input: unknown): EvidenceValidationResult {
   try {
-    const data = copyJson(input);
+    const data = copyBoundedJson(input);
     if (!isRecord(data) || Object.keys(data).some((key) => !allowed.has(key))) throw new Error("Unexpected evidence shape.");
     for (const key of stringFields) {
       if (typeof data[key] !== "string" || data[key].trim().length === 0) throw new Error("Missing string field.");

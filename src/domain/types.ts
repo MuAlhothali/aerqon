@@ -87,7 +87,7 @@ export interface Finding {
 }
 
 export interface RemediationAction { actionId: string; findingId: string; owner: string; status: RemediationState; recommendedDeadline?: string; actionDescription: string; verificationCondition: string; customerReportedAt?: string; notes: string; }
-export interface TimelineEvent { eventId: string; findingId: string; eventType: "DETECTED" | "ACKNOWLEDGED" | "REMEDIATED" | "VERIFIED" | "RESOLVED" | "REOPENED"; eventAt: string; actorType: "SYSTEM" | "CUSTOMER" | "REVIEWER"; description: string; supportingEvidenceIds: readonly string[]; }
+export interface TimelineEvent { eventId: string; findingId: string; eventType: "DETECTED" | "ACKNOWLEDGED" | "REMEDIATED" | "RECHECKED" | "VERIFIED" | "RESOLVED" | "REOPENED"; eventAt: string; actorType: "SYSTEM" | "CUSTOMER" | "REVIEWER"; description: string; supportingEvidenceIds: readonly string[]; }
 export type RecheckOutcome = "RESOLVED" | "STILL_OPEN" | "REOPENED" | "NEW" | "UNABLE_TO_VERIFY";
 export interface Recheck { recheckId: string; assessmentId: string; baselineAssessmentId: string; performedAt: string; ruleManifestVersion: string; comparisonResults: readonly { findingId: string; outcome: RecheckOutcome }[]; status: "COMPLETE" | "PARTIAL"; }
 export interface Report { reportId: string; assessmentId: string; classification: "SYNTHETIC"; status: "DRAFT" | "FINAL"; generatedAt: string; findingIds: readonly string[]; evidenceSourceIds: readonly string[]; limitations: readonly string[]; }
