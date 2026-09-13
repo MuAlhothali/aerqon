@@ -87,6 +87,10 @@ web_modules/
 .next
 out
 
+# Playwright test artifacts
+playwright-report/
+test-results/
+
 # Nuxt.js build / generate output
 .nuxt
 dist
@@ -134,3 +138,15 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# AERQON local tooling and generated visual QA artifacts
+.claude/
+CLAUDE.md
+qa-artifacts/
+visual-qa/
+screenshots/
+qa-pdfs/
+*.qa.pdf
+*-qa.pdf
+*-screenshot.png
+*-screenshot.jpg
