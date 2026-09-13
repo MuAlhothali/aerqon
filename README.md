@@ -1,4 +1,4 @@
-# AERQON
+﻿# AERQON
 
 Cloud security evidence and remediation assurance for small SaaS teams using AWS.
 
@@ -24,10 +24,9 @@ Production readiness and commercial demand are not validated.
 
 [Follow the product walkthrough](#product-walkthrough) · [Run locally](#commands)
 
-## Validation resources
+## Public demo and validation guide
 
-- [Demo script](docs/demo-script.md): a three-minute walkthrough for showing the synthetic evidence-to-verification flow.
-- [Customer discovery pack](docs/validation/customer-discovery.md): interview questions and scoring criteria for validating whether remediation evidence is a real customer problem.
+- [Public demo and validation guide](docs/public-demo-and-validation.md): a three-minute demo walkthrough and customer discovery pack for validating whether remediation evidence is a real customer problem.
 
 ## Domain hardening contract
 
@@ -147,3 +146,4 @@ node "C:\Program Files\nodejs\node_modules\npm\bin\npm-cli.js" run build
 Unit/integration tests cover bounded hostile input, three adapters, source-brand neutrality, applicability, conflicting observations/IDs, exact source-binding swaps, lineage/version/freshness rejection, immutable snapshots, state transitions and report consistency. Component tests cover filtering, language, RTL, theme preferences and escaped hostile report text. Playwright covers the six primary product journeys plus keyboard navigation, coverage, print styling and narrow English/Arabic layouts.
 
 On resource-constrained Windows machines, `npm run test -- --maxWorkers=2` avoids concurrent worker startup timeouts. If another process owns port 3000, use a separate Playwright configuration with an unused local port and a known production `next start` server; do not terminate unrelated processes or reuse an unknown server. Generated `.next`, test results, dependency directories, and local visual QA artifacts are ignored by Git.
+
