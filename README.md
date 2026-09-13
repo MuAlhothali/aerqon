@@ -12,6 +12,18 @@ The Northstar SaaS demonstration includes three source adapters, bounded runtime
 
 **NO LIVE AWS** access, AI, database, authentication, billing, automatic remediation, and continuous monitoring are not implemented.
 
+## See the prototype
+
+![Synthetic SG-001 recheck showing baseline FAIL, fresh PASS, and verified RESOLVED](docs/images/sg-001-recheck.png)
+
+**Detection is not verification.** In the synthetic Northstar example, SG-001 resolves only after fresh compatible evidence supports PASS. A reported fix alone cannot resolve a finding.
+
+**DEMO DATA / SYNTHETIC ENVIRONMENT / NOT CUSTOMER DATA / NO LIVE AWS**
+
+Production readiness and commercial demand are not validated.
+
+[Follow the product walkthrough](#product-walkthrough) · [Run locally](#commands)
+
 ## Domain hardening contract
 
 - Evidence validation copies only the approved envelope fields into a deeply frozen object. JSON data is bounded to depth 16, 128 keys per object, 256 array items, 10,000 characters per string, 5,000 values, and 100,000 total key/value characters per evidence object. Evaluation accepts at most 256 objects. Accessors, exotic objects, cycles, prototype-like keys, malformed booleans, and unexpected envelope fields are rejected.
