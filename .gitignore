@@ -141,6 +141,7 @@ dist
 
 # AERQON local tooling and generated visual QA artifacts
 .claude/
+CLAUDE.md
 qa-artifacts/
 visual-qa/
 screenshots/
