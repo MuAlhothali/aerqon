@@ -24,6 +24,11 @@ Production readiness and commercial demand are not validated.
 
 [Follow the product walkthrough](#product-walkthrough) · [Run locally](#commands)
 
+## Validation resources
+
+- [Demo script](docs/demo-script.md): a three-minute walkthrough for showing the synthetic evidence-to-verification flow.
+- [Customer discovery pack](docs/validation/customer-discovery.md): interview questions and scoring criteria for validating whether remediation evidence is a real customer problem.
+
 ## Domain hardening contract
 
 - Evidence validation copies only the approved envelope fields into a deeply frozen object. JSON data is bounded to depth 16, 128 keys per object, 256 array items, 10,000 characters per string, 5,000 values, and 100,000 total key/value characters per evidence object. Evaluation accepts at most 256 objects. Accessors, exotic objects, cycles, prototype-like keys, malformed booleans, and unexpected envelope fields are rejected.
