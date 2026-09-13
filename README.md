@@ -8,9 +8,9 @@ Cloud security evidence and remediation assurance for small SaaS teams using AWS
 
 Evidence → validation → evaluation → prioritization → action → verification → Evidence Package. AERQON turns supplied configuration observations into an explainable remediation plan and verifies matching fresh evidence. It is not another connected scanner. Commercial demand and production readiness are not validated.
 
-The Northstar SaaS demonstration includes three source adapters, bounded runtime validation, deterministic evaluations, coverage, findings, owner/action assignments, baseline/current evidence, verified remediation, and four printable reports. All data is **DEMO DATA**, a **SYNTHETIC ENVIRONMENT**, and **NOT CUSTOMER DATA**. Those labels remain visible in the console and reports.
+The Northstar SaaS demonstration includes three source adapters, bounded runtime validation, deterministic evaluations, coverage, findings, owner/action assignments, baseline/current evidence, verified remediation, and four printable reports. All data is **DEMO DATA**, a **SYNTHETIC ENVIRONMENT**, **NOT CUSTOMER DATA**, and **NO LIVE AWS**. Those labels remain visible in the console and reports.
 
-Real AWS access, AI, database, authentication, billing, automatic remediation, and continuous monitoring are not implemented.
+**NO LIVE AWS** access, AI, database, authentication, billing, automatic remediation, and continuous monitoring are not implemented.
 
 ## Domain hardening contract
 
@@ -107,11 +107,13 @@ npm run start
 npm run typecheck
 npm run lint
 npm test
-npm run build
+npm run build -- --webpack
 npm run test:e2e
 ```
 
 Run `npx playwright install chromium` once before the end-to-end test on a new machine.
+
+The verified E2E run uses Playwright Chromium against a known production `next start` server after a successful webpack build. The checked-in Playwright configuration uses port 3000 and may reuse an existing server; do not terminate an unrelated process occupying that port.
 
 ### Local environment note
 
@@ -127,4 +129,4 @@ node "C:\Program Files\nodejs\node_modules\npm\bin\npm-cli.js" run build
 
 Unit/integration tests cover bounded hostile input, three adapters, source-brand neutrality, applicability, conflicting observations/IDs, exact source-binding swaps, lineage/version/freshness rejection, immutable snapshots, state transitions and report consistency. Component tests cover filtering, language, RTL, theme preferences and escaped hostile report text. Playwright covers the six primary product journeys plus keyboard navigation, coverage, print styling and narrow English/Arabic layouts.
 
-On resource-constrained Windows machines, `npm run test -- --maxWorkers=2` avoids concurrent worker startup timeouts. The checked-in Playwright config uses port 3000. If another process owns that port, use a separate Playwright config with an unused local port and production `next start` after a successful build; do not terminate unrelated processes or reuse an unknown server. The final local review uses isolated port 3109 and the already installed browser cache. Generated `.next`, test results and dependency directories are ignored by Git.
+On resource-constrained Windows machines, `npm run test -- --maxWorkers=2` avoids concurrent worker startup timeouts. If another process owns port 3000, use a separate Playwright configuration with an unused local port and a known production `next start` server; do not terminate unrelated processes or reuse an unknown server. Generated `.next`, test results, dependency directories, and local visual QA artifacts are ignored by Git.
